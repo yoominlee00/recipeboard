@@ -61,17 +61,6 @@ function RecipeList() {
         <div className="recipe-grid">
           {recipes.map(recipe => (
             <Link to={`/recipe/${recipe.id}`} key={recipe.id} className="recipe-card">
-              {/* 어두운 오버레이 추가 */}
-              <div style={{
-                position: 'absolute',
-                top: 0,
-                left: 0,
-                width: '100%',
-                height: '100%',
-                background: 'linear-gradient(0deg, rgba(0,0,0,0.4) 0%, rgba(0,0,0,0.1) 50%, rgba(0,0,0,0) 100%)',
-                zIndex: 1
-              }}></div>
-              
               {recipe.imageUrl ? (
                 <img 
                   src={recipe.imageUrl} 
