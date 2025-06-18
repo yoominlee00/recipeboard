@@ -1,11 +1,14 @@
+@import url('https://fonts.googleapis.com/css2?family=Gaegu:wght@300;400;700&family=Nunito:wght@400;600;700&display=swap');
+
 body {
   margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+  font-family: 'Nunito', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
     'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="%23ffcc29" stroke="%235c3c10" stroke-width="2"><path d="M11 9H9V2H7v7H5V2H3v7c0 2.21 1.79 4 4 4v9h4v-9c2.21 0 4-1.79 4-4V2h-2v7h-2V2H9v7zm10 4h-3v9h3v-9z"/></svg>') 0 24, auto;
+  cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="%239bbc6c" stroke="%237d9b4e" stroke-width="2"><path d="M11 9H9V2H7v7H5V2H3v7c0 2.21 1.79 4 4 4v9h4v-9c2.21 0 4-1.79 4-4V2h-2v7h-2V2H9v7zm10 4h-3v9h3v-9z"/></svg>') 0 24, auto;
+  background-color: #f8f9f0;
 }
 
 code {
@@ -15,7 +18,7 @@ code {
 
 /* 클릭 가능한 요소에 대한 커서 설정 */
 a, button, input[type="submit"], input[type="button"], .btn, [role="button"] {
-  cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="%23ffa41b" stroke="%235c3c10" stroke-width="2"><path d="M11 9H9V2H7v7H5V2H3v7c0 2.21 1.79 4 4 4v9h4v-9c2.21 0 4-1.79 4-4V2h-2v7h-2V2H9v7zm10 4h-3v9h3v-9z"/></svg>') 0 24, pointer;
+  cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="%23ffcc29" stroke="%237d9b4e" stroke-width="2"><path d="M11 9H9V2H7v7H5V2H3v7c0 2.21 1.79 4 4 4v9h4v-9c2.21 0 4-1.79 4-4V2h-2v7h-2V2H9v7zm10 4h-3v9h3v-9z"/></svg>') 0 24, pointer;
 }
 
 /* 로딩 팝업 스타일 */
@@ -213,8 +216,9 @@ a, button, input[type="submit"], input[type="button"], .btn, [role="button"] {
 .recipe-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-  gap: 20px;
+  gap: 25px;
   margin-top: 30px;
+  padding: 10px;
 }
 
 .recipe-card {
@@ -222,8 +226,9 @@ a, button, input[type="submit"], input[type="button"], .btn, [role="button"] {
   border-radius: 15px;
   overflow: hidden;
   box-shadow: 0 10px 20px -5px rgba(0, 0, 0, 0.2);
-  transition: transform 0.3s, box-shadow 0.3s;
+  transition: transform 0.3s, box-shadow 0.3s, background-color 0.5s ease;
   height: 300px;
+  background-color: #8aaa5b;
 }
 
 .recipe-card:hover {
@@ -235,22 +240,39 @@ a, button, input[type="submit"], input[type="button"], .btn, [role="button"] {
   width: 100%;
   height: 100%;
   object-fit: cover;
+  opacity: 0;
+  transition: opacity 0.5s ease;
+}
+
+.recipe-card:hover .recipe-image {
+  opacity: 1;
 }
 
 .recipe-overlay {
   position: absolute;
-  bottom: 0;
+  top: 0;
   left: 0;
   right: 0;
-  background: linear-gradient(transparent, rgba(0, 0, 0, 0.2) 10%, rgba(0, 0, 0, 0.7) 70%, rgba(0, 0, 0, 0.85) 100%);
+  bottom: 0;
+  background: linear-gradient(135deg, #9bbc6c 0%, #7d9b4e 100%);
   padding: 25px;
   color: white;
-  text-align: left;
-  height: 50%; /* 오버레이 높이 조정 */
+  text-align: center;
   display: flex;
   flex-direction: column;
+  justify-content: center;
+  z-index: 2;
+  transition: all 0.5s ease;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.recipe-card:hover .recipe-overlay {
+  background: linear-gradient(transparent, rgba(0, 0, 0, 0.2) 10%, rgba(0, 0, 0, 0.7) 70%, rgba(0, 0, 0, 0.85) 100%);
   justify-content: flex-end;
-  z-index: 2; /* 다른 오버레이보다 위에 표시 */
+  text-align: left;
+  height: 50%;
+  top: auto;
+  backdrop-filter: blur(3px);
 }
 
 .recipe-title {
@@ -258,29 +280,79 @@ a, button, input[type="submit"], input[type="button"], .btn, [role="button"] {
   font-size: 30px;
   margin-bottom: 8px;
   color: white;
-  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.9), 0 4px 8px rgba(0, 0, 0, 0.5);
+  text-shadow: 1px 1px 2px rgba(92, 60, 16, 0.5);
   font-weight: bold;
   letter-spacing: 0.5px;
+  transition: all 0.5s ease;
+  position: relative;
+  display: inline-block;
+}
+
+.recipe-title::after {
+  content: "";
+  position: absolute;
+  width: 0;
+  height: 3px;
+  bottom: -5px;
+  left: 0;
+  background-color: white;
+  transition: width 0.5s ease;
+}
+
+.recipe-card:hover .recipe-title {
+  color: white;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.9), 0 4px 8px rgba(0, 0, 0, 0.5);
+}
+
+.recipe-card:hover .recipe-title::after {
+  width: 100%;
 }
 
 .recipe-category {
   display: inline-block;
-  background-color: #ffcc29;
-  color: #5c3c10;
+  background-color: rgba(255, 255, 255, 0.2);
+  color: white;
   padding: 4px 12px;
   border-radius: 20px;
   font-size: 14px;
   font-weight: bold;
   margin-right: 10px;
+  backdrop-filter: blur(5px);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  transition: all 0.5s ease;
+}
+
+.recipe-card:hover .recipe-category {
+  background-color: white;
+  color: #7d9b4e;
   box-shadow: 0 3px 6px -2px rgba(0, 0, 0, 0.5);
+  transform: translateY(-3px);
 }
 
 .recipe-author {
   font-size: 16px;
   opacity: 1;
   color: white;
-  text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.9), 0 3px 6px rgba(0, 0, 0, 0.5);
   font-weight: 500;
+  transition: all 0.5s ease;
+  background: linear-gradient(90deg, rgba(255,255,255,0.7) 0%, rgba(255,255,255,0.7) 100%);
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: shine-text 3s linear infinite;
+}
+
+@keyframes shine-text {
+  to {
+    background-position: 200% center;
+  }
+}
+
+.recipe-card:hover .recipe-author {
+  color: white;
+  -webkit-text-fill-color: white;
+  animation: none;
+  text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.9), 0 3px 6px rgba(0, 0, 0, 0.5);
 }
 
 .recipe-emoji {
@@ -290,19 +362,57 @@ a, button, input[type="submit"], input[type="button"], .btn, [role="button"] {
   font-size: 30px;
   filter: drop-shadow(2px 2px 3px rgba(0, 0, 0, 0.5));
   animation: float 3s ease-in-out infinite;
+  opacity: 0;
+  transition: opacity 0.5s ease;
+}
+
+.recipe-card:hover .recipe-emoji {
+  opacity: 1;
+}
+
+@keyframes float {
+  0% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
+  100% { transform: translateY(0); }
 }
 
 .welcome-banner {
-  background-color: rgba(255, 204, 41, 0.9);
+  background: linear-gradient(135deg, #8aaa5b 0%, #9bbc6c 100%);
   border-radius: 15px;
-  padding: 15px;
+  padding: 20px;
   margin-bottom: 30px;
-  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 10px 25px -5px rgba(125, 155, 78, 0.4);
   text-align: center;
+  border: 2px solid rgba(255, 255, 255, 0.2);
+  position: relative;
+  overflow: hidden;
+}
+
+.welcome-banner::before {
+  content: "";
+  position: absolute;
+  top: -10px;
+  left: -10px;
+  right: -10px;
+  bottom: -10px;
+  background: linear-gradient(45deg, transparent 30%, rgba(255, 255, 255, 0.2) 40%, rgba(255, 255, 255, 0.2) 60%, transparent 70%);
+  background-size: 200% 200%;
+  animation: shine 3s infinite;
+  z-index: 1;
+}
+
+@keyframes shine {
+  0% {background-position: 200% 0;}
+  100% {background-position: -200% 0;}
 }
 
 .welcome-banner h3 {
   margin: 0;
-  color: #5c3c10;
+  color: #fff;
   font-family: 'Gaegu', cursive;
+  font-size: 24px;
+  text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.2);
+  position: relative;
+  z-index: 2;
+  letter-spacing: 0.5px;
 }
