@@ -2,6 +2,7 @@ import React, { useState, useEffect, useContext } from 'react';
 import { Link } from 'react-router-dom';
 import { recipeApi } from '../services/api';
 import { UserContext } from '../contexts/UserContext';
+import LoadingChef from './LoadingChef';
 
 function RecipeList() {
   const [recipes, setRecipes] = useState([]);
@@ -12,7 +13,11 @@ function RecipeList() {
   useEffect(() => {
     const fetchRecipes = async () => {
       try {
-        const response = await recipeApi.getAll();
+        const loadingDelay = new Promise(resolve => setTimeout(resolve, 3000));
+        const [response] = await Promise.all([
+          recipeApi.getAll(),
+          loadingDelay
+        ]);
         setRecipes(response.data);
         setLoading(false);
       } catch (err) {
@@ -25,32 +30,24 @@ function RecipeList() {
     fetchRecipes();
   }, []);
 
-  // 음식 이모지 랜덤 선택
   const foodEmojis = ['🍕', '🍔', '🍜', '🍣', '🍰', '🍦', '🍗', '🥗', '🌮', '🥐'];
   const getRandomEmoji = () => {
     return foodEmojis[Math.floor(Math.random() * foodEmojis.length)];
   };
 
-  if (loading) return (
-    <div className="text-center my-5">
-      <div className="spinner-border" style={{ color: '#ffcc29' }}></div>
-      <p className="mt-3">맛있는 레시피를 가져오고 있어요...</p>
-    </div>
-  );
+  if (loading) {
+    return <LoadingChef isLoading={loading} />;
+  }
   
   if (error) return <div className="alert alert-danger my-3">{error}</div>;
 
   return (
-    <div className="container my-4">
-      <div className="text-center mb-5">
-        <h2 className="display-4 mb-3">오늘 뭐 먹지? <span className="float-icon">🤔</span></h2>
-        {user && (
-          <div className="alert alert-warning mb-3">
-            <strong>{user.username}</strong>님 안녕하세요! 오늘은 어떤 요리를 해볼까요?
-          </div>
-        )}
-        <p className="lead">맛있는 레시피를 찾아보세요!</p>
-      </div>
+    <div className="container-fluid px-4">
+      {user && (
+        <div className="welcome-banner">
+          <h3>{user.username}님, 오늘은 어떤 요리를 해볼까요? {getRandomEmoji()}</h3>
+        </div>
+      )}
       
       {recipes.length === 0 ? (
         <div className="text-center my-5">
@@ -61,47 +58,77 @@ function RecipeList() {
           </Link>
         </div>
       ) : (
-        <div className="row">
+        <div className="recipe-grid">
           {recipes.map(recipe => (
-            <div className="col-md-4 mb-4" key={recipe.id}>
-              <div className="card h-100">
-                {recipe.imageUrl ? (
-                  <img 
-                    src={recipe.imageUrl} 
-                    className="card-img-top" 
-                    alt={recipe.title}
-                    style={{ height: '200px', objectFit: 'cover' }}
-                  />
-                ) : (
-                  <div 
-                    className="card-img-top d-flex align-items-center justify-content-center"
-                    style={{ height: '200px', backgroundColor: '#fff9e6', fontSize: '5rem' }}
-                  >
-                    {getRandomEmoji()}
-                  </div>
-                )}
-                <div className="card-body">
-                  <h5 className="card-title">{recipe.title}</h5>
-                  <p className="card-text text-muted">
-                    {recipe.category && <span className="badge bg-warning me-2">{recipe.category}</span>}
-                    <small>작성자: {recipe.author}</small>
-                  </p>
-                  <p className="card-text">
-                    {recipe.content.length > 100 
-                      ? `${recipe.content.substring(0, 100)}...` 
-                      : recipe.content}
-                  </p>
-                  <Link to={`/recipe/${recipe.id}`} className="btn btn-primary">
-                    레시피 보기 <i className="fas fa-arrow-right"></i>
-                  </Link>
+            <Link to={`/recipe/${recipe.id}`} key={recipe.id} className="recipe-card">
+              {/* 어두운 오버레이 추가 */}
+              <div style={{
+                position: 'absolute',
+                top: 0,
+                left: 0,
+                width: '100%',
+                height: '100%',
+                background: 'linear-gradient(0deg, rgba(0,0,0,0.4) 0%, rgba(0,0,0,0.1) 50%, rgba(0,0,0,0) 100%)',
+                zIndex: 1
+              }}></div>
+              
+              {recipe.imageUrl ? (
+                <img 
+                  src={recipe.imageUrl} 
+                  alt={recipe.title}
+                  className="recipe-image"
+                />
+              ) : (
+                <div 
+                  className="recipe-image"
+                  style={{ 
+                    backgroundColor: '#fff9e6',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    fontSize: '5rem'
+                  }}
+                >
+                  {getRandomEmoji()}
                 </div>
-                <div className="card-footer text-muted">
-                  {new Date(recipe.createdAt).toLocaleDateString()}
+              )}
+              <div className="recipe-overlay">
+                <h3 className="recipe-title">{recipe.title}</h3>
+                <div>
+                  {recipe.category && (
+                    <span className="recipe-category">{recipe.category}</span>
+                  )}
+                  <span className="recipe-author">by {recipe.author}</span>
                 </div>
               </div>
-            </div>
+              <div className="recipe-emoji">
+                {getRandomEmoji()}
+              </div>
+            </Link>
           ))}
         </div>
+      )}
+      
+      {user && (
+        <Link 
+          to="/create" 
+          className="btn btn-primary"
+          style={{
+            position: 'fixed',
+            bottom: '30px',
+            right: '30px',
+            borderRadius: '50%',
+            width: '60px',
+            height: '60px',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            fontSize: '24px',
+            boxShadow: '0 4px 10px rgba(0,0,0,0.2)'
+          }}
+        >
+          <i className="fas fa-plus"></i>
+        </Link>
       )}
     </div>
   );

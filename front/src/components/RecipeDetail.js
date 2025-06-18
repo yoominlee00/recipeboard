@@ -3,6 +3,7 @@ import { useParams, useNavigate, Link } from 'react-router-dom';
 import { recipeApi } from '../services/api';
 import CommentSection from './CommentSection';
 import { UserContext } from '../contexts/UserContext';
+import LoadingChef from './LoadingChef';
 
 function RecipeDetail() {
   const { id } = useParams();
@@ -22,7 +23,14 @@ function RecipeDetail() {
   useEffect(() => {
     const fetchRecipe = async () => {
       try {
-        const response = await recipeApi.getById(id);
+        // 로딩 애니메이션을 더 오래 보여주기 위해 인위적인 지연 추가
+        const loadingDelay = new Promise(resolve => setTimeout(resolve, 3000));
+        
+        const [response] = await Promise.all([
+          recipeApi.getById(id),
+          loadingDelay // 3초 지연
+        ]);
+        
         setRecipe(response.data);
         setLoading(false);
       } catch (err) {
@@ -45,6 +53,10 @@ function RecipeDetail() {
     if (window.confirm('정말로 이 레시피를 삭제하시겠습니까?')) {
       try {
         setDeleting(true);
+        
+        // 삭제 애니메이션을 더 오래 보여주기 위해 인위적인 지연 추가
+        await new Promise(resolve => setTimeout(resolve, 2000));
+        
         await recipeApi.delete(id, user.username);
         alert('레시피가 삭제되었습니다.');
         navigate('/');
@@ -56,12 +68,10 @@ function RecipeDetail() {
     }
   };
 
-  if (loading) return (
-    <div className="text-center my-5">
-      <div className="spinner-border" style={{ color: '#ffcc29' }}></div>
-      <p className="mt-3">맛있는 레시피를 가져오고 있어요...</p>
-    </div>
-  );
+  // 귀여운 주방장 로딩 컴포넌트 사용
+  if (loading) {
+    return <LoadingChef isLoading={loading} />;
+  }
   
   if (error) return <div className="alert alert-danger my-3">{error}</div>;
   if (!recipe) return <div className="alert alert-warning my-3">레시피를 찾을 수 없습니다.</div>;
@@ -136,6 +146,9 @@ function RecipeDetail() {
           <i className="fas fa-arrow-left"></i> 목록으로 돌아가기
         </Link>
       </div>
+      
+      {/* 삭제 중일 때도 로딩 애니메이션 표시 */}
+      <LoadingChef isLoading={deleting} />
     </div>
   );
 }
