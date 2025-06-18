@@ -1,0 +1,176 @@
+@import url('https://fonts.googleapis.com/css2?family=Gaegu:wght@300;400;700&display=swap');
+
+body {
+  font-family: 'Gaegu', cursive;
+  background-color: #fff9e6;
+}
+
+.App {
+  text-align: center;
+}
+
+/* 귀여운 노란색 테마 */
+:root {
+  --primary-color: #ffcc29;
+  --secondary-color: #ffa41b;
+  --accent-color: #ff5733;
+  --light-color: #fff9e6;
+  --dark-color: #5c3c10;
+}
+
+/* 헤더 스타일 */
+.navbar {
+  background-color: var(--primary-color) !important;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.navbar-brand, .nav-link {
+  color: var(--dark-color) !important;
+  font-weight: bold;
+}
+
+.navbar-brand {
+  font-size: 1.8rem;
+}
+
+.navbar-brand i {
+  margin-right: 8px;
+}
+
+/* 카드 스타일 */
+.card {
+  border-radius: 15px;
+  overflow: hidden;
+  border: none;
+  box-shadow: 0 6px 10px rgba(0, 0, 0, 0.08);
+  transition: transform 0.3s;
+}
+
+.card:hover {
+  transform: translateY(-5px);
+}
+
+.card-header {
+  background-color: var(--primary-color);
+  color: var(--dark-color);
+  font-weight: bold;
+}
+
+.card-footer {
+  background-color: var(--light-color);
+}
+
+/* 버튼 스타일 */
+.btn-primary {
+  background-color: var(--secondary-color) !important;
+  border-color: var(--secondary-color) !important;
+  color: var(--dark-color) !important;
+  font-weight: bold;
+  border-radius: 25px;
+  padding: 8px 20px;
+}
+
+.btn-secondary {
+  background-color: #e0e0e0 !important;
+  border-color: #e0e0e0 !important;
+  color: var(--dark-color) !important;
+  font-weight: bold;
+  border-radius: 25px;
+  padding: 8px 20px;
+}
+
+.btn-outline-primary {
+  border-color: var(--secondary-color) !important;
+  color: var(--secondary-color) !important;
+  border-radius: 25px;
+}
+
+.btn-outline-primary:hover {
+  background-color: var(--secondary-color) !important;
+  color: white !important;
+}
+
+/* 배지 스타일 */
+.badge {
+  border-radius: 12px;
+  padding: 5px 10px;
+  font-size: 0.8rem;
+}
+
+.badge-secondary {
+  background-color: var(--secondary-color) !important;
+  color: white;
+}
+
+/* 푸터 스타일 */
+footer {
+  background-color: var(--primary-color) !important;
+  color: var(--dark-color) !important;
+  font-weight: bold;
+}
+
+/* 폼 스타일 */
+.form-control {
+  border-radius: 15px;
+  border: 2px solid #ffe0b2;
+  padding: 10px 15px;
+}
+
+.form-control:focus {
+  border-color: var(--secondary-color);
+  box-shadow: 0 0 0 0.25rem rgba(255, 204, 41, 0.25);
+}
+
+/* 애니메이션 */
+@keyframes float {
+  0% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+  100% {
+    transform: translateY(0px);
+  }
+}
+
+.float-icon {
+  animation: float 3s ease-in-out infinite;
+}
+
+/* 페이지 제목 스타일 */
+h2, h3, h4 {
+  color: var(--dark-color);
+  font-weight: bold;
+  margin-bottom: 1.5rem;
+}
+
+h2::after {
+  content: '';
+  display: block;
+  width: 50px;
+  height: 4px;
+  background-color: var(--secondary-color);
+  margin: 10px auto;
+  border-radius: 2px;
+}
+
+/* 댓글 스타일 */
+.comment-avatar {
+  min-width: 50px;
+}
+
+.comment-bubble {
+  position: relative;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+}
+
+.comment-bubble::before {
+  content: '';
+  position: absolute;
+  left: -10px;
+  top: 15px;
+  border-top: 10px solid transparent;
+  border-bottom: 10px solid transparent;
+  border-right: 10px solid white;
+}
