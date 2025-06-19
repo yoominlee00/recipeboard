@@ -41,7 +41,8 @@ function Login() {
         id: userData.id
       });
       
-      navigate('/');
+      // 로딩 애니메이션 없이 바로 홈으로 이동
+      navigate('/', { replace: true });
     } catch (err) {
       setError('로그인에 실패했습니다. 사용자 이름과 비밀번호를 확인해주세요.');
       console.error('Login error:', err);

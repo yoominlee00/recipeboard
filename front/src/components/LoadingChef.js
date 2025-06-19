@@ -11,7 +11,7 @@ const LoadingChef = ({ isLoading }) => {
     if (isLoading) {
       setVisible(true);
     } else {
-      // 로딩이 끝나도 애니메이션을 더 길게 보여주기 위해 타임아웃 설정
+      // 로딩이 끝나도 애니메이션을 더 오래 보여주기 위해 타임아웃 설정
       const timer = setTimeout(() => {
         setVisible(false);
       }, 3000); // 3초 동안 더 표시

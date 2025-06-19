@@ -47,7 +47,8 @@ function Signup() {
       });
       
       alert('회원가입이 완료되었습니다!');
-      navigate('/');
+      // 로딩 애니메이션 없이 바로 홈으로 이동
+      navigate('/', { replace: true });
     } catch (err) {
       setError('회원가입에 실패했습니다. 다른 사용자 이름을 사용해보세요.');
       console.error('Signup error:', err);

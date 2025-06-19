@@ -2,22 +2,18 @@ import React, { useState, useEffect, useContext } from 'react';
 import { Link } from 'react-router-dom';
 import { recipeApi } from '../services/api';
 import { UserContext } from '../contexts/UserContext';
-import LoadingChef from './LoadingChef';
 
 function RecipeList() {
   const [recipes, setRecipes] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const { user } = useContext(UserContext);
+  const { user, skipLoading } = useContext(UserContext);
 
   useEffect(() => {
     const fetchRecipes = async () => {
       try {
-        const loadingDelay = new Promise(resolve => setTimeout(resolve, 3000));
-        const [response] = await Promise.all([
-          recipeApi.getAll(),
-          loadingDelay
-        ]);
+        // skipLoading이 true이면 로딩 지연 없이 바로 데이터 가져오기
+        const response = await recipeApi.getAll();
         setRecipes(response.data);
         setLoading(false);
       } catch (err) {
@@ -27,8 +23,13 @@ function RecipeList() {
       }
     };
 
+    // 로그인 직후에는 로딩 상태를 건너뛰기
+    if (skipLoading) {
+      setLoading(false);
+    }
+
     fetchRecipes();
-  }, []);
+  }, [skipLoading]);
 
   const foodEmojis = ['🍕', '🍔', '🍜', '🍣', '🍰', '🍦', '🍗', '🥗', '🌮', '🥐'];
   const getRandomEmoji = () => {
@@ -36,7 +37,12 @@ function RecipeList() {
   };
 
   if (loading) {
-    return <LoadingChef isLoading={loading} />;
+    return (
+      <div className="text-center my-5">
+        <div className="spinner-border" style={{ color: '#8aaa5b' }}></div>
+        <p className="mt-3">레시피를 불러오는 중...</p>
+      </div>
+    );
   }
   
   if (error) return <div className="alert alert-danger my-3">{error}</div>;
