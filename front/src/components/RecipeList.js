@@ -7,12 +7,11 @@ function RecipeList() {
   const [recipes, setRecipes] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const { user, skipLoading } = useContext(UserContext);
+  const { user } = useContext(UserContext);
 
   useEffect(() => {
     const fetchRecipes = async () => {
       try {
-        // skipLoading이 true이면 로딩 지연 없이 바로 데이터 가져오기
         const response = await recipeApi.getAll();
         setRecipes(response.data);
         setLoading(false);
@@ -23,13 +22,8 @@ function RecipeList() {
       }
     };
 
-    // 로그인 직후에는 로딩 상태를 건너뛰기
-    if (skipLoading) {
-      setLoading(false);
-    }
-
     fetchRecipes();
-  }, [skipLoading]);
+  }, []);
 
   const foodEmojis = ['🍕', '🍔', '🍜', '🍣', '🍰', '🍦', '🍗', '🥗', '🌮', '🥐'];
   const getRandomEmoji = () => {
